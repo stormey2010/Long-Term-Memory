@@ -1,0 +1,196 @@
+
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Memory Management | AI Add</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+        body {
+            font-family: "Nunito", sans-serif;
+            background: linear-gradient(180deg, #4E0C70, #10002b 50%, black 100%) no-repeat;
+            margin: 0;
+            padding: 0;
+            color: white;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .main-container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.103);
+            color: rgb(255, 255, 255);
+            border-radius: 10px;
+            box-shadow: 0 0 5px rgba(19, 19, 19, 0.1);
+        }
+
+        .header {
+            background: none;
+            color: #fff;
+            padding: 10px 20px;
+            text-align: center;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0);
+            padding: 10px 10px;
+            border-radius: 10px;
+            margin-left: 15%;
+            margin-right: 15%;
+            margin-top: 15px;
+            position: sticky;
+        }
+
+        .navbar .brand {
+            font-size: 2em;
+            font-weight: 500;
+            color: white;
+            text-decoration: none;
+        }
+
+        .navbar .nav-links a {
+            color: #fff;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: border 0.2s, background-color 0.2s, color 0.2s;
+        }
+
+        .navbar .nav-links a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        h1 {
+            color: #5a2d81;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        input[type="text"], textarea {
+            font-family: "Nunito", sans-serif;
+            font-size: 20px;
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #7a16ac3f;
+            background-color: #ffffff2f;
+            border-radius: 4px;
+            color: white;
+            outline: none;
+        }
+
+        input[type="submit"] {
+            padding: 7px 12px;
+            border: 1px solid #7a16acb2;
+            border-radius: 7px;
+            background-color: #8017b459;
+            color: rgb(214, 214, 214);
+            transition: border 0.1s, background-color 0.1s, color 0.1s;
+            cursor: pointer;
+            font-size: 17px;
+        }
+
+        input[type="submit"]:hover {
+            border: 1px solid #8017b4;
+            background-color: rgba(128, 23, 180, 0.418);
+            color: rgb(233, 230, 230);
+        }
+
+        .page-title {
+            color: rgb(255, 255, 255);
+            margin-top: 2.5%;
+            padding: 15px;
+            width: 100%;
+            font-size: 30px;
+            margin-left: 8%;
+        }
+
+        .cancel-button {
+            padding: 7px 12px;
+            border: 1px solid #ac161667;
+            border-radius: 7px;
+            background-color: #b4171718;
+            color: rgba(214, 214, 214, 0.685);
+            text-decoration: none;
+            margin-left: 10px;
+            transition: border 0.1s, background-color 0.1s, color 0.1s;
+        }
+
+        .cancel-button:hover {
+            border: 1px solid #ac1616a9;
+            background-color: #b4171756;
+            color: rgba(214, 214, 214, 0.795);
+        }
+
+        .button-container {
+            display: flex;
+            width: 100%;
+        }
+
+        textarea::placeholder {
+            color: #b8b8b8ad;
+        }
+
+        @media (max-width: 1150px) {
+            .navbar {
+                margin-left: 5%;
+                margin-right: 5%;
+            }
+        }
+
+        @media (max-width: 865px) {
+            .nav-links {
+                display: none;
+            }
+
+            .brand {
+                margin: 0 auto;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .main-delete-button {
+                display: none;
+            }
+
+            .brand {
+                margin: 0 auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="{{ url_for('index') }}" class="brand">
+            <i class="fa-solid fa-brain"></i> Long-Term-Memory
+        </a>
+        <div class="nav-links">
+            <a href="{{ url_for('index') }}">Home</a>
+            <a href="{{ url_for('ai_add_item') }}">Add Item AI</a>
+            <a href="{{ url_for('add_item') }}">Add Item Manually</a>
+        </div>
+    </nav>
+    <div class="page-title">Add Item using AI</div>
+    <div class="main-container">
+        <form action="{{ url_for('ai_add_item') }}" method="POST">
+            <textarea placeholder="Enter what you want saved here..." name="text" rows="7" required style="resize: none;"></textarea>
+            <br>
+            <div class="button-container">
+                <input type="submit" value="Submit">
+                <a class="cancel-button" href="{{ url_for('index') }}">Cancel</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
+

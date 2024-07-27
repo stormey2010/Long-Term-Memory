@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Management | Home</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+        body {
+            font-family: "Nunito", sans-serif;
+            background: linear-gradient(180deg, #4E0C70, #10002b 50%, black 100%) no-repeat;
+            margin: 0;
+            padding: 0;
+            color: white;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background: none;
+            color: #fff;
+            padding: 10px 20px;
+            text-align: center;
+        }
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0);
+            padding: 10px 10px;
+            border-radius: 10px;
+            margin-left: 15%;
+            margin-right: 15%;
+            margin-top: 15px;
+            position: sticky;
+        }
+        .nav .brand {
+            font-size: 2em;
+            font-weight: 500;
+            color: white;
+            text-decoration: none;
+        }
+        .nav .links a {
+            color: #fff;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: border 0.2s, background-color 0.2s, color 0.2s;
+
+        }
+        .nav .links a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        .item-list {
+            list-style-type: none;
+            padding: 0;
+            position: relative;
+            overflow:auto;
+            height: 70vh;
+        }
+        .item-list li {
+            background: rgba(255, 255, 255, 0.103);
+            color: rgb(255, 255, 255);
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(19, 19, 19, 0.1);
+            position: relative;
+        }
+        .item-list h2 {
+            margin: 0;
+            font-size: 1.5em;
+        }
+        .item-list p {
+            margin: 5px 0;
+        }
+        .item-list .keywords {
+            font-style: italic;
+            color: #c4c4c4;
+        }
+        .actions {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .main-delete-button {
+            display: inline-block;
+            padding: 10px 12px;
+            text-decoration: none;
+            border: 1px solid #d3323279;
+            border-radius: 7px;
+            background-color: #d8171752;
+            color: rgb(214, 214, 214);
+            transition: border 0.1s, background-color 0.1s, color 0.1s;
+
+        }
+        .main-delete-button:hover {
+            border: 1px solid #d33232b6;
+            background-color: #d8171798;
+            color: rgb(228, 227, 227);
+        }
+        button{
+            cursor: pointer;
+        }
+        .trash-container {
+            font-size: 16px;
+            padding: 7px 10px;
+            position: absolute;
+            top: 30px;
+            right: 10px;
+            transform: translateY(-50%);
+            border: 1px solid #b82424;
+            border-radius: 7px;
+            background-color: #ffffff0c;
+            color: rgb(184, 25, 25);
+            transition: border 0.1s, background-color 0.1s, color 0.1s;
+
+        }
+        .trash-container:hover {
+            border: 1px solid #e92929;
+            background-color: #ffffff3a;
+            color: rgb(240, 28, 28);
+        }
+        .details-container {
+            position: absolute;
+            top: 30px;
+            text-decoration: none;
+            right: 55px;
+            transform: translateY(-50%);
+            padding: 7px 12px;
+            border: 1px solid #8017b4;
+            border-radius: 7px;
+            background-color: #ffffff0c;
+            color: rgb(214, 214, 214);
+            transition: border 0.1s, background-color 0.1s, color 0.1s;
+
+        }
+        .details-container:hover {
+            border: 1px solid #8017b4;
+            background-color: #8017b446;
+            color: rgb(233, 230, 230);
+        }
+        .main-button {
+            padding: 7px 12px;
+            border: 1px solid #7a16acb2;
+            border-radius: 7px;
+            background-color: #8017b45d;
+            color: rgb(214, 214, 214);
+            text-decoration: none;
+            transition: border 0.1s, background-color 0.1s, color 0.1s;
+
+        }
+        .main-button:hover {
+            border: 1px solid #8017b4;
+            background-color: rgba(128, 23, 180, 0.418);
+            color: rgb(233, 230, 230);
+        }
+        .search-bar {
+            padding: 5px;
+            width: 50%;
+            padding: 1px 12px;
+            height: 37px;
+            border: 1px solid #7a16acb2;
+            border-radius: 7px;
+            background-color: #8017b41c;
+            color: rgb(214, 214, 214);
+        }
+        #massDeleteInput{
+            padding: 3px;
+            width: 40%;
+            border: 1px solid #7a16acb2;
+            border-radius: 3px;
+            background-color: #8017b41c;
+            color: rgb(214, 214, 214);
+        }
+        .item-delete-modal {
+            display: none; 
+            position: fixed; 
+            z-index: 100; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgb(0,0,0); 
+            background-color: rgba(0,0,0,0.4); 
+            padding-top: 60px; 
+        }
+        .item-delete-modal-content {
+            background: #1a0225ea;
+            color: rgb(255, 255, 255);
+            border-radius: 12px;
+            box-shadow: 0 0 5px rgba(19, 19, 19, 0.1);
+            margin: 5% auto; 
+            padding: 20px;
+            width: 80%; 
+            max-width: 500px;
+            border: 1px solid #b593c52f; 
+        }
+        .item-delete-close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .item-delete-close:hover,
+        .item-delete-close:focus {
+            color: #cecece;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .item-delete-modal-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .item-delete-modal-button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: white;
+            font-size: 16px;
+        }
+        .item-delete-confirm-btn {
+            padding: 7px 12px;
+            border: 1px solid #16ac2ab2;
+            border-radius: 7px;
+            background-color: #17b41fc5;
+            color: rgb(214, 214, 214);
+            text-decoration: none;
+        }
+        .item-delete-cancel-btn {
+            padding: 7px 12px;
+            border: 1px solid #ac1616b2;
+            border-radius: 7px;
+            background-color: #b417175d;
+            color: rgb(214, 214, 214);
+            text-decoration: none;
+        }
+        .mass-delete-modal {
+            display: none; 
+            position: fixed; 
+            z-index: 100; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgb(0,0,0); 
+            background-color: rgba(0,0,0,0.4); 
+            padding-top: 60px; 
+        }
+        .mass-delete-modal-content {
+            background: #1a0225ea;
+            color: rgb(255, 255, 255);
+            border-radius: 12px;
+            box-shadow: 0 0 5px rgba(19, 19, 19, 0.1);
+            margin: 5% auto; 
+            padding: 20px;
+            width: 80%; 
+            max-width: 500px;
+            border: 1px solid #b593c52f; 
+        }
+        .mass-delete-close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .mass-delete-close:hover,
+        .mass-delete-close:focus {
+            color: #cecece;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .mass-delete-modal-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .mass-delete-modal-button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: white;
+            font-size: 16px;
+        }
+        .mass-delete-confirm-btn {
+            padding: 7px 12px;
+            border: 1px solid #16ac2ab2;
+            border-radius: 7px;
+            background-color: #17b41fc5;
+            color: rgb(214, 214, 214);
+            text-decoration: none;
+        }
+        .mass-delete-cancel-btn {
+            padding: 7px 12px;
+            border: 1px solid #ac1616b2;
+            border-radius: 7px;
+            background-color: #b417175d;
+            color: rgb(214, 214, 214);
+            text-decoration: none;
+        }
+        .welcome-message{
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            font-size: 25px;
+            color: rgb(192, 192, 192);
+            font-weight: 200;
+        }
+
+        @media (max-width: 1150px) {
+            .nav{
+                margin-left: 5%;
+                margin-right: 5%;
+            }
+        }
+        @media (max-width: 865px) {
+            .links{
+                display: none;
+            }
+            .brand{
+                margin: 0 auto;
+            }
+        }
+        @media (max-width: 600px) {
+            .main-delete-button{
+                display: none;
+            }
+            .brand{
+                margin: 0 auto;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <a href="#" class="brand">
+            <i class="fa-solid fa-brain"></i> Long-Term-Memory
+        </a>
+        <div class="links">
+            <a href="{{ url_for('index') }}">Home</a>
+            <a href="{{ url_for('ai_add_item') }}">Add Item AI</a>
+            <a href="{{ url_for('add_item') }}">Add Item Manually</a>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="actions">
+            <a class="main-button" href="{{ url_for('ai_add_item') }}"><i style="margin-right:4px;" class="fa-solid fa-pen-to-square"></i> New</a>
+            <input type="text" onkeyup="search()" id="search-bar" class="search-bar" placeholder="Search...">
+            <button class="main-delete-button" onclick="openMassDeleteModal()"><i style="margin-right:4px;" class="fa-solid fa-trash"></i> Delete All</button>
+        </div>
+        <ul id="item-list-search" class="item-list">
+            {% for item in items %}
+            <li class="li-list-search">
+                <h2>{{ item[1] }}</h2>
+                <p style="color: rgb(226, 225, 225);"><strong style="color: white;">Description:</strong> {{ item[2] }}</p>
+                <p style="color: rgb(226, 225, 225);"><strong style="color: white;">Importance:</strong> {{ item[3] }}</p>
+                <p style="color: rgb(226, 225, 225);"><strong style="color: white;">Keywords:</strong> {{ item[4] }}</p>
+                <a class="details-container" href="{{ url_for('item_details', item_id=item[0]) }}">View Details</a>
+                <button class="trash-container" data-id="{{ item[0] }}" onclick="openDeleteModal(this)">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div id="itemDeleteModal" class="item-delete-modal">
+        <div class="item-delete-modal-content">
+            <span class="item-delete-close" onclick="closeDeleteModal()">&times;</span>
+            <p>Are you sure you want to delete this item?</p>
+            <div class="item-delete-modal-buttons">
+                <button class="item-delete-confirm-btn" id="deleteConfirmBtn">Delete</button>
+                <button class="item-delete-cancel-btn" onclick="closeDeleteModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+    <div id="massDeleteModal" class="mass-delete-modal">
+        <div class="mass-delete-modal-content">
+            <span class="mass-delete-close" onclick="closeMassDeleteModal()">&times;</span>
+            <p>Type "Understood" to confirm deletion of all items, this can not be undone:</p>
+            <input autocomplete="off" type="text" id="massDeleteInput" placeholder="Type Understood here" class="mass-delete-input">
+            <div class="mass-delete-modal-buttons">
+                <button class="mass-delete-confirm-btn" id="massDeleteConfirmBtn" disabled>Delete All</button>
+                <button class="mass-delete-cancel-btn" onclick="closeMassDeleteModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let deleteItemId = null;
+
+        function openDeleteModal(button) {
+            deleteItemId = button.getAttribute('data-id');
+            document.getElementById('itemDeleteModal').style.display = 'block';
+        }
+
+        function closeDeleteModal() {
+            deleteItemId = null;
+            document.getElementById('itemDeleteModal').style.display = 'none';
+        }
+
+        function openMassDeleteModal() {
+            document.getElementById('massDeleteModal').style.display = 'block';
+        }
+
+        function closeMassDeleteModal() {
+            document.getElementById('massDeleteModal').style.display = 'none';
+        }
+
+        document.getElementById('deleteConfirmBtn').addEventListener('click', function() {
+            if (deleteItemId !== null) {
+                fetch(`/delete/${deleteItemId}`, {
+                    method: 'POST'
+                }).then(() => {
+                    window.location.reload();
+                });
+            }
+        });
+
+        document.getElementById('massDeleteInput').addEventListener('input', function() {
+            const input = document.getElementById('massDeleteInput').value;
+            const confirmBtn = document.getElementById('massDeleteConfirmBtn');
+            confirmBtn.disabled = input.toUpperCase() !== 'DELETE';
+        });
+
+        document.getElementById('massDeleteConfirmBtn').addEventListener('click', function() {
+            fetch('/delete_all', {
+                method: 'POST'
+            }).then(() => {
+                window.location.reload();
+            });
+        });
+
+        window.onclick = function(event) {
+            const itemDeleteModal = document.getElementById('itemDeleteModal');
+            const massDeleteModal = document.getElementById('massDeleteModal');
+
+            if (event.target == itemDeleteModal) {
+                itemDeleteModal.style.display = "none";
+            }
+            if (event.target == massDeleteModal) {
+                massDeleteModal.style.display = "none";
+            }
+        }
+
+        function search() {
+            var input, filter, ul, li, i, txtValue;
+            input = document.getElementById('search-bar');
+            filter = input.value.toUpperCase();
+            ul = document.getElementById("item-list-search");
+            li = ul.getElementsByClassName('li-list-search');
+
+            for (i = 0; i < li.length; i++) {
+                txtValue = li[i].textContent || li[i].innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    li[i].style.display = "";
+                } else {
+                    li[i].style.display = "none";
+                }
+            }
+        }
+    </script>
+</body>
+</html>
